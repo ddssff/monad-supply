@@ -20,6 +20,7 @@ module Control.Monad.Supply
 
 import Control.Applicative
 import Control.Monad.Identity
+import Control.Monad.RWS
 import Control.Monad.State
 import Control.Monad.Error
 import Control.Monad.Reader
@@ -62,6 +63,11 @@ instance MonadSupply s m => MonadSupply s (ReaderT r m) where
   exhausted = lift exhausted
 
 instance (Monoid w, MonadSupply s m) => MonadSupply s (WriterT w m) where
+  supply = lift supply
+  peek = lift peek
+  exhausted = lift exhausted
+
+instance (MonadSupply s m, Monoid w) => MonadSupply s (RWST r w st m) where
   supply = lift supply
   peek = lift peek
   exhausted = lift exhausted
